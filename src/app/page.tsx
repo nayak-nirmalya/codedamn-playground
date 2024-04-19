@@ -13,7 +13,11 @@ export default function Home() {
         <UserButton afterSignOutUrl="/" />
       </SignedIn>
       <SignedOut>
-        <SignInButton />
+        <SignInButton
+          mode="modal"
+          afterSignInUrl="/dashboard"
+          afterSignUpUrl="/dashboard"
+        />
       </SignedOut>
     </main>
   );
