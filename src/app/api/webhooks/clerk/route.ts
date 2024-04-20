@@ -4,7 +4,7 @@ import { WebhookEvent } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
 import db from "@/db/drizzle";
-import { users } from "@/db/schema";
+import { user } from "@/db/schema";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === "user.created") {
-    await db.insert(users).values({
+    await db.insert(user).values({
       userId: payload.data.id,
       username: payload.data.username,
       firstName: payload.data.first_name,
@@ -65,18 +65,18 @@ export async function POST(req: Request) {
 
   if (eventType === "user.updated") {
     await db
-      .update(users)
+      .update(user)
       .set({
         username: payload.data.username,
         firstName: payload.data.first_name,
         lastName: payload.data.last_name,
         email: payload.data.email_addresses[0].email_address,
       })
-      .where(eq(users.userId, payload.data.id));
+      .where(eq(user.userId, payload.data.id));
   }
 
   if (eventType === "user.deleted") {
-    await db.delete(users).where(eq(users.userId, payload.data.id));
+    await db.delete(user).where(eq(user.userId, payload.data.id));
   }
 
   return new Response("", { status: 200 });
