@@ -14,9 +14,7 @@ export default async function DashboardPage() {
       <h1>DashboardPage (Protected)</h1>
       <SignedIn>
         <UserButton afterSignOutUrl="/" />
-        <button className="text-4xl font-bold" onClick={runTask}>
-          Run Task
-        </button>
+        <a href="/api/aws">Run Task</a>
       </SignedIn>
       <SignedOut>
         <SignInButton

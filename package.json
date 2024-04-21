@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-ecs": "^3.556.0",
+    "@aws-sdk/client-s3": "^3.556.0",
     "@clerk/nextjs": "^4.30.0",
     "@neondatabase/serverless": "^0.9.1",
     "class-variance-authority": "^0.7.0",
@@ -33,7 +34,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "dotenv": "^16.4.5",
-    "drizzle-kit": "^0.20.16",
+    "drizzle-kit": "^0.20.17",
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
     "pg": "^8.11.5",
