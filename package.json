@@ -12,6 +12,7 @@
     "db:generate": "pnpm exec drizzle-kit generate:pg"
   },
   "dependencies": {
+    "@aws-sdk/client-ecs": "^3.556.0",
     "@clerk/nextjs": "^4.30.0",
     "@neondatabase/serverless": "^0.9.1",
     "class-variance-authority": "^0.7.0",
