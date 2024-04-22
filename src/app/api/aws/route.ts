@@ -10,6 +10,9 @@ import {
 } from "@aws-sdk/client-s3";
 import { auth } from "@clerk/nextjs/server";
 
+import db from "@/db/drizzle";
+import { user, project } from "@/db/schema";
+
 export async function GET() {
   const { userId } = auth();
 
@@ -25,7 +28,17 @@ export async function GET() {
     },
   });
 
-  const bucketName = userId.toLowerCase().replace("_", "-");
+  const projectRes = await db
+    .insert(project)
+    .values({
+      userId: userId,
+      projectName: "test",
+      playground: "Node",
+      status: "QUEUE",
+    })
+    .returning();
+
+  const bucketName = projectRes[0].id;
 
   try {
     await s3Client.send(
@@ -40,13 +53,13 @@ export async function GET() {
     }
   }
 
-  await s3Client.send(
-    new PutObjectCommand({
-      Bucket: bucketName,
-      Key: "randomUUID/",
-    })
-  );
-  console.log("Text File Created!");
+  // await s3Client.send(
+  //   new PutObjectCommand({
+  //     Bucket: bucketName,
+  //     Key: "randomUUID/",
+  //   })
+  // );
+  // console.log("Text File Created!");
 
   // await s3Client.send(new DeleteBucketCommand({ Bucket: bucketName }));
   // console.log("Bucket Deleted!");
