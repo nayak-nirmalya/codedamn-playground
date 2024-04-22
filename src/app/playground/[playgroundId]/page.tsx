@@ -8,6 +8,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { Browser } from "@/components/browser";
 import { EditorComponent } from "@/components/editor";
 import { FolderStructureComponent } from "@/components/folder-structure";
 import { EditorTabs } from "@/components/editor-tabs";
@@ -23,7 +24,6 @@ import { websocketStore } from "@/store/websocket";
 import { portStore } from "@/store/port";
 import { createFileOrFolderStore } from "@/store/create-file-or-folder";
 import { folderStructureStore } from "@/store/folder-structure";
-import { Browser } from "@/components/browser";
 
 export default function PlaygroundIdPage({
   params: { playgroundId },
@@ -84,11 +84,11 @@ export default function PlaygroundIdPage({
             direction="vertical"
             className="bg-[#282a36]"
           >
-            <ResizablePanel defaultSize={75}>
+            <ResizablePanel defaultSize={75} className="border-b-2">
               <EditorTabs />
               <EditorComponent />
             </ResizablePanel>
-            <ResizableHandle withHandle />
+            {/* <ResizableHandle withHandle /> */}
             <ResizablePanel defaultSize={25}>
               <DynamicShell playgroundId="99dc20f9-64d4-4330-b5c1-4bb0ed1b3e99" />
             </ResizablePanel>

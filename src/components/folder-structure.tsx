@@ -14,11 +14,20 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 import { IconPack } from "@/assets/icon-pack";
-
-import { ContextForFiles } from "./file-context";
-import { ContextForFolders } from "./folder-context";
 
 export interface VisibleState {
   [key: string]: boolean;
@@ -46,6 +55,9 @@ const Tree = ({
   setPath,
 }: TreeProps) => {
   const [visible, setVisible] = useState<VisibleState>({});
+  const [dialogState, setDialogState] = useState<
+    "CREATE_FOLDER" | "CREATE_FILE" | "DELETE_FOLDER" | "RENAME_FOLDER"
+  >("CREATE_FILE");
 
   const toggleVisibility = (name: string) => {
     setVisible({ ...visible, [name]: !visible[name] });
@@ -88,87 +100,198 @@ const Tree = ({
   useEffect(() => toggleVisibility("code"), []);
 
   return (
-    <div style={{ paddingLeft: "10px", color: "white" }}>
-      {data.children ? (
-        // Folders
-        <ContextMenu>
-          <button
-            onContextMenu={(e) => handleContextForFolders(e, data.path)}
-            onClick={() => toggleVisibility(data.name)}
-            style={{
-              paddingTop: "6px",
-              fontSize: "15px",
-              backgroundColor: "transparent",
-              color: "white",
-              outline: "none",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            <ContextMenuTrigger>
-              <div className="flex flex-row items-center gap-x-2 justify-center">
-                {visible[data.name] ? (
-                  <ChevronUp className="h-3 w-3" />
-                ) : (
-                  <ChevronDown className="h-3 w-3" />
-                )}
-                {data.name}
-              </div>
-            </ContextMenuTrigger>
-          </button>
-          <ContextMenuContent>
-            <ContextMenuItem>Rename Folder</ContextMenuItem>
-            <ContextMenuItem>Delete Folder</ContextMenuItem>
-          </ContextMenuContent>
-        </ContextMenu>
-      ) : (
-        // Files
-        <ContextMenu>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            {IconPack.hasOwnProperty(data.name.split(".").pop()!) ? (
-              IconPack[data.name.split(".").pop()!]
-            ) : (
-              <File
-                color="gray"
-                display="block"
-                style={{ marginTop: "7px" }}
-              />
-            )}
-            <p
-              onContextMenu={(e) => handleContextForFiles(e, data.path)}
-              onClick={() => handleDoubleClick(data.path)}
+    <Dialog>
+      <div style={{ paddingLeft: "10px", color: "white" }}>
+        {data.children ? (
+          // Folders
+          <ContextMenu>
+            <button
+              onContextMenu={(e) => handleContextForFolders(e, data.path)}
+              onClick={() => toggleVisibility(data.name)}
               style={{
-                fontSize: "15px",
-                cursor: "pointer",
-                marginLeft: "5px",
                 paddingTop: "6px",
+                fontSize: "15px",
+                backgroundColor: "transparent",
+                color: "white",
+                outline: "none",
+                border: "none",
+                cursor: "pointer",
               }}
             >
-              <ContextMenuTrigger>{data.name}</ContextMenuTrigger>
-            </p>
+              <ContextMenuTrigger>
+                <div className="flex flex-row items-center gap-x-2 justify-center">
+                  {visible[data.name] ? (
+                    <ChevronUp className="h-3 w-3" />
+                  ) : (
+                    <ChevronDown className="h-3 w-3" />
+                  )}
+                  {data.name}
+                </div>
+              </ContextMenuTrigger>
+            </button>
+            <ContextMenuContent>
+              <DialogTrigger asChild>
+                <ContextMenuItem
+                  onClick={() => setDialogState("CREATE_FOLDER")}
+                >
+                  Create Folder
+                </ContextMenuItem>
+              </DialogTrigger>
+              <DialogTrigger asChild>
+                <ContextMenuItem
+                  onClick={() => setDialogState("CREATE_FILE")}
+                >
+                  Create File
+                </ContextMenuItem>
+              </DialogTrigger>
+              <DialogTrigger asChild>
+                <ContextMenuItem
+                  onClick={() => setDialogState("RENAME_FOLDER")}
+                >
+                  Rename Folder
+                </ContextMenuItem>
+              </DialogTrigger>
+              <DialogTrigger asChild>
+                <ContextMenuItem
+                  onClick={() => setDialogState("DELETE_FOLDER")}
+                >
+                  Delete Folder
+                </ContextMenuItem>
+              </DialogTrigger>
+            </ContextMenuContent>
+          </ContextMenu>
+        ) : (
+          // Files
+          <ContextMenu>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {IconPack.hasOwnProperty(data.name.split(".").pop()!) ? (
+                IconPack[data.name.split(".").pop()!]
+              ) : (
+                <File
+                  color="gray"
+                  display="block"
+                  style={{ marginTop: "7px" }}
+                />
+              )}
+              <p
+                onContextMenu={(e) => handleContextForFiles(e, data.path)}
+                onClick={() => handleDoubleClick(data.path)}
+                style={{
+                  fontSize: "15px",
+                  cursor: "pointer",
+                  marginLeft: "5px",
+                  paddingTop: "6px",
+                }}
+              >
+                <ContextMenuTrigger>{data.name}</ContextMenuTrigger>
+              </p>
+            </div>
+            <ContextMenuContent>
+              <ContextMenuItem>Rename File</ContextMenuItem>
+              <ContextMenuItem>Delete File</ContextMenuItem>
+            </ContextMenuContent>
+          </ContextMenu>
+        )}
+        {visible[data.name] &&
+          data.children &&
+          data.children.map((child) => (
+            <Tree
+              key={child.name}
+              data={child}
+              ws={ws}
+              addOrUpdateAvailableTabs={addOrUpdateAvailableTabs}
+              setX={setX}
+              setY={setY}
+              setContextForFileOpen={setContextForFileOpen}
+              setContextForFolderOpen={setContextForFolderOpen}
+              setPath={setPath}
+            />
+          ))}
+      </div>
+      {dialogState === "CREATE_FOLDER" && (
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Create folder</DialogTitle>
+          </DialogHeader>
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <Input
+                id="link"
+                defaultValue="https://ui.shadcn.com/docs/installation"
+                className="border-black"
+              />
+            </div>
           </div>
-          <ContextMenuContent>
-            <ContextMenuItem>Rename File</ContextMenuItem>
-            <ContextMenuItem>Delete File</ContextMenuItem>
-          </ContextMenuContent>
-        </ContextMenu>
+          <DialogFooter className="sm:justify-end">
+            <DialogClose asChild>
+              <Button type="button" variant="default">
+                Create
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
       )}
-      {visible[data.name] &&
-        data.children &&
-        data.children.map((child) => (
-          <Tree
-            key={child.name}
-            data={child}
-            ws={ws}
-            addOrUpdateAvailableTabs={addOrUpdateAvailableTabs}
-            setX={setX}
-            setY={setY}
-            setContextForFileOpen={setContextForFileOpen}
-            setContextForFolderOpen={setContextForFolderOpen}
-            setPath={setPath}
-          />
-        ))}
-    </div>
+      {dialogState === "CREATE_FILE" && (
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Create file</DialogTitle>
+          </DialogHeader>
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <Input
+                id="link"
+                defaultValue="https://ui.shadcn.com/docs/installation"
+                className="border-black"
+              />
+            </div>
+          </div>
+          <DialogFooter className="sm:justify-end">
+            <DialogClose asChild>
+              <Button type="button" variant="default">
+                Create
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      )}
+      {dialogState === "RENAME_FOLDER" && (
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Rename folder</DialogTitle>
+          </DialogHeader>
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <Input
+                id="link"
+                defaultValue="https://ui.shadcn.com/docs/installation"
+                className="border-black"
+              />
+            </div>
+          </div>
+          <DialogFooter className="sm:justify-end">
+            <DialogClose asChild>
+              <Button type="button" variant="default">
+                Rename
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      )}
+      {dialogState === "DELETE_FOLDER" && (
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. Are you sure you want to
+              permanently delete this folder?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="submit">Confirm</Button>
+          </DialogFooter>
+        </DialogContent>
+      )}
+    </Dialog>
   );
 };
 
@@ -190,22 +313,6 @@ export const FolderStructureComponent = () => {
 
   return (
     <>
-      {/* {contextForFileOpen && x && y && (
-        <ContextForFiles
-          x={x}
-          y={y}
-          setOpen={setContextForFileOpen}
-          path={path}
-        />
-      )}
-      {contextForFolderOpen && x && y && (
-        <ContextForFolders
-          x={x}
-          y={y}
-          setOpen={setContextForFolderOpen}
-          path={path}
-        />
-      )} */}
       {folderStructure && (
         <Tree
           data={folderStructure}
