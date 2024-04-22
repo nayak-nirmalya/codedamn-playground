@@ -34,15 +34,19 @@ export function Shell({ playgroundId }: { playgroundId: string }) {
       fontSize: 16,
       fontFamily: "Ubuntu Mono, monospace",
     });
+
     term.open(terminal.current!);
+
     let fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
     fitAddon.fit();
+
     ws.onopen = () => {
       const attachAddon = new AttachAddon(ws);
       term.loadAddon(attachAddon);
       setWs(ws);
     };
+
     return () => {
       term.dispose();
     };
@@ -50,10 +54,6 @@ export function Shell({ playgroundId }: { playgroundId: string }) {
 
   return (
     <div
-      // style={{
-      //   height: "23vh",
-      //   overflow: "auto",
-      // }}
       ref={terminal}
       className="terminal overflow-auto h-[23vh]"
       id="terminal-container"

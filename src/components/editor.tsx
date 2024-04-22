@@ -14,7 +14,7 @@ export function EditorComponent() {
   const activeTab = activeTabStore((state) => state.activeTab);
   const ws = websocketStore((state) => state.ws);
 
-  let eventToEmit: number | null = null;
+  let eventToEmit: any = null;
 
   const handleChange = (value: string | undefined, e: any) => {
     if (eventToEmit !== null) clearTimeout(eventToEmit);

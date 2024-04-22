@@ -15,7 +15,9 @@ export const folderStructureStore = create<FolderStructureStore>()(
   (set) => ({
     folderStructure: null,
     setFolderStructure: async (playgroundId) => {
-      const response = await fetch(`/api/tree/${playgroundId}`);
+      const response = await fetch(
+        `http://localhost:3000/api/tree/${playgroundId}`
+      );
       set({ folderStructure: await response.json() });
     },
   })

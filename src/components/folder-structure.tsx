@@ -1,4 +1,4 @@
-import React, { Dispatch, useState } from "react";
+import React, { Dispatch, useEffect, useState } from "react";
 import { ChevronUp, ChevronDown, File } from "lucide-react";
 
 import {
@@ -78,6 +78,8 @@ const Tree = ({
     setPath(path);
   };
 
+  useEffect(() => toggleVisibility("code"), []);
+
   return (
     <div style={{ paddingLeft: "10px", color: "white" }}>
       {data.children ? (
@@ -94,13 +96,14 @@ const Tree = ({
             cursor: "pointer",
           }}
         >
-          {visible[data.name] ? (
-            <ChevronUp className="h-3 w-3" />
-          ) : (
-            <ChevronDown className="h-3 w-3" />
-          )}
-          &nbsp;
-          {data.name}
+          <div className="flex flex-row items-center gap-x-2 justify-center">
+            {visible[data.name] ? (
+              <ChevronUp className="h-3 w-3" />
+            ) : (
+              <ChevronDown className="h-3 w-3" />
+            )}
+            {data.name}
+          </div>
         </button>
       ) : (
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -115,7 +118,7 @@ const Tree = ({
           )}
           <p
             onContextMenu={(e) => handleContextForFiles(e, data.path)}
-            onDoubleClick={() => handleDoubleClick(data.path)}
+            onClick={() => handleDoubleClick(data.path)}
             style={{
               fontSize: "15px",
               cursor: "pointer",
