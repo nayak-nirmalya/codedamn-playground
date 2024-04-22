@@ -1,5 +1,7 @@
 import React from "react";
 
+import { EditorComponent } from "@/components/editor";
+
 export default function PlaygroundIdPage({
   params: { pgId },
 }: {
@@ -7,5 +9,9 @@ export default function PlaygroundIdPage({
 }) {
   console.log(pgId);
 
-  return <div>PlaygroundIdPage</div>;
+  return (
+    <div>
+      <EditorComponent />
+    </div>
+  );
 }
