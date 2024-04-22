@@ -55,7 +55,7 @@ export function Shell({ playgroundId }: { playgroundId: string }) {
   return (
     <div
       ref={terminal}
-      className="terminal overflow-auto h-[23vh]"
+      className="terminal overflow-auto h-[25vh]"
       id="terminal-container"
     />
   );
