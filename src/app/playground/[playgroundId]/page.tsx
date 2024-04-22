@@ -31,8 +31,6 @@ export default function PlaygroundIdPage({
     "ws://localhost:3000/?playgroundId=" + playgroundId
   );
 
-  console.log(ws);
-
   ws.onopen = () => {
     setWs(ws);
     ws.onmessage = (msg) => {
