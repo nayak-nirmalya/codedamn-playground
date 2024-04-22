@@ -8,6 +8,13 @@ import {
 import { availableTabsStore } from "@/store/available-tabs";
 import { websocketStore } from "@/store/websocket";
 
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+
 import { IconPack } from "@/assets/icon-pack";
 
 import { ContextForFiles } from "./file-context";
@@ -83,52 +90,68 @@ const Tree = ({
   return (
     <div style={{ paddingLeft: "10px", color: "white" }}>
       {data.children ? (
-        <button
-          onContextMenu={(e) => handleContextForFolders(e, data.path)}
-          onClick={() => toggleVisibility(data.name)}
-          style={{
-            paddingTop: "6px",
-            fontSize: "15px",
-            backgroundColor: "transparent",
-            color: "white",
-            outline: "none",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          <div className="flex flex-row items-center gap-x-2 justify-center">
-            {visible[data.name] ? (
-              <ChevronUp className="h-3 w-3" />
-            ) : (
-              <ChevronDown className="h-3 w-3" />
-            )}
-            {data.name}
-          </div>
-        </button>
-      ) : (
-        <div style={{ display: "flex", alignItems: "center" }}>
-          {IconPack.hasOwnProperty(data.name.split(".").pop()!) ? (
-            IconPack[data.name.split(".").pop()!]
-          ) : (
-            <File
-              color="gray"
-              display="block"
-              style={{ marginTop: "7px" }}
-            />
-          )}
-          <p
-            onContextMenu={(e) => handleContextForFiles(e, data.path)}
-            onClick={() => handleDoubleClick(data.path)}
+        // Folders
+        <ContextMenu>
+          <button
+            onContextMenu={(e) => handleContextForFolders(e, data.path)}
+            onClick={() => toggleVisibility(data.name)}
             style={{
-              fontSize: "15px",
-              cursor: "pointer",
-              marginLeft: "5px",
               paddingTop: "6px",
+              fontSize: "15px",
+              backgroundColor: "transparent",
+              color: "white",
+              outline: "none",
+              border: "none",
+              cursor: "pointer",
             }}
           >
-            {data.name}
-          </p>
-        </div>
+            <ContextMenuTrigger>
+              <div className="flex flex-row items-center gap-x-2 justify-center">
+                {visible[data.name] ? (
+                  <ChevronUp className="h-3 w-3" />
+                ) : (
+                  <ChevronDown className="h-3 w-3" />
+                )}
+                {data.name}
+              </div>
+            </ContextMenuTrigger>
+          </button>
+          <ContextMenuContent>
+            <ContextMenuItem>Rename Folder</ContextMenuItem>
+            <ContextMenuItem>Delete Folder</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
+      ) : (
+        // Files
+        <ContextMenu>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {IconPack.hasOwnProperty(data.name.split(".").pop()!) ? (
+              IconPack[data.name.split(".").pop()!]
+            ) : (
+              <File
+                color="gray"
+                display="block"
+                style={{ marginTop: "7px" }}
+              />
+            )}
+            <p
+              onContextMenu={(e) => handleContextForFiles(e, data.path)}
+              onClick={() => handleDoubleClick(data.path)}
+              style={{
+                fontSize: "15px",
+                cursor: "pointer",
+                marginLeft: "5px",
+                paddingTop: "6px",
+              }}
+            >
+              <ContextMenuTrigger>{data.name}</ContextMenuTrigger>
+            </p>
+          </div>
+          <ContextMenuContent>
+            <ContextMenuItem>Rename File</ContextMenuItem>
+            <ContextMenuItem>Delete File</ContextMenuItem>
+          </ContextMenuContent>
+        </ContextMenu>
       )}
       {visible[data.name] &&
         data.children &&
@@ -167,7 +190,7 @@ export const FolderStructureComponent = () => {
 
   return (
     <>
-      {contextForFileOpen && x && y && (
+      {/* {contextForFileOpen && x && y && (
         <ContextForFiles
           x={x}
           y={y}
@@ -182,7 +205,7 @@ export const FolderStructureComponent = () => {
           setOpen={setContextForFolderOpen}
           path={path}
         />
-      )}
+      )} */}
       {folderStructure && (
         <Tree
           data={folderStructure}

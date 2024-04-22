@@ -72,19 +72,21 @@ export default function PlaygroundIdPage({
   return (
     ws && (
       <ResizablePanelGroup direction="horizontal" className="min-h-screen">
-        <ResizablePanel defaultSize={20}>
-          <div className="bg-[#22212c] min-h-screen">
-            <FolderStructureComponent />
-          </div>
+        <ResizablePanel
+          className="bg-[#22212c] min-h-screen"
+          defaultSize={20}
+        >
+          <FolderStructureComponent />
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={60}>
-          <ResizablePanelGroup direction="vertical">
+          <ResizablePanelGroup
+            direction="vertical"
+            className="bg-[#282a36]"
+          >
             <ResizablePanel defaultSize={75}>
-              <div className="bg-[#282a36]">
-                <EditorTabs />
-                <EditorComponent />
-              </div>
+              <EditorTabs />
+              <EditorComponent />
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel defaultSize={25}>
@@ -101,49 +103,4 @@ export default function PlaygroundIdPage({
       </ResizablePanelGroup>
     )
   );
-
-  // return (
-  //   ws && (
-  //     <>
-  //       <div style={{ display: "flex" }}>
-  //         <div
-  //           className="folder-structure-parent"
-  //           style={{
-  //             paddingRight: "10px",
-  //             paddingTop: "0.2vh",
-  //             minWidth: "250px",
-  //             maxWidth: "25%",
-  //             height: "99.8vh",
-  //             backgroundColor: "#22212c",
-  //             fontFamily: "Roboto, sans-serif",
-  //             overflow: "auto",
-  //           }}
-  //         >
-  //           <FolderStructureComponent />
-  //         </div>
-  //         <div
-  //           className="bg-black"
-  //           style={{ height: "100vh", width: "100vw" }}
-  //         >
-  //           <div
-  //             style={{
-  //               display: "flex",
-  //               flexDirection: "column",
-  //               backgroundColor: "#282a36",
-  //               width: "100%",
-  //               height: "100%",
-  //             }}
-  //           >
-  //             <div style={{ borderBottom: "1px solid #bd93f9" }}>
-  //               <EditorTabs />
-  //               <EditorComponent />
-  //             </div>
-  //             <DynamicShell playgroundId="99dc20f9-64d4-4330-b5c1-4bb0ed1b3e99" />
-  //           </div>
-  //           <Browser playgroundId={playgroundId} />
-  //         </div>
-  //       </div>
-  //     </>
-  //   )
-  // );
 }
