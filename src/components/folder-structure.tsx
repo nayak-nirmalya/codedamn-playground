@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ChevronUp, ChevronDown, File } from "lucide-react";
 
 import {
@@ -6,6 +6,7 @@ import {
   folderStructureStore,
 } from "@/store/folder-structure";
 import { availableTabsStore } from "@/store/available-tabs";
+import { createFileOrFolderStore } from "@/store/create-file-or-folder";
 import { websocketStore } from "@/store/websocket";
 
 import {
@@ -37,27 +38,61 @@ export interface TreeProps {
   data: FolderStructure;
   ws: WebSocket;
   addOrUpdateAvailableTabs: (path: string) => void;
-  setX: Dispatch<number>;
-  setY: Dispatch<number>;
-  setContextForFileOpen: Dispatch<boolean>;
-  setContextForFolderOpen: Dispatch<boolean>;
-  setPath: Dispatch<string>;
 }
 
-const Tree = ({
-  data,
-  ws,
-  addOrUpdateAvailableTabs,
-  setX,
-  setY,
-  setContextForFileOpen,
-  setContextForFolderOpen,
-  setPath,
-}: TreeProps) => {
+const Tree = ({ data, ws, addOrUpdateAvailableTabs }: TreeProps) => {
+  const [name, setName] = useState("");
   const [visible, setVisible] = useState<VisibleState>({});
   const [dialogState, setDialogState] = useState<
-    "CREATE_FOLDER" | "CREATE_FILE" | "DELETE_FOLDER" | "RENAME_FOLDER"
-  >("CREATE_FILE");
+    | "CREATE_FOLDER"
+    | "CREATE_FILE"
+    | "DELETE_FOLDER"
+    | "RENAME_FOLDER"
+    | "NONE"
+  >("NONE");
+
+  const fileRef = useRef(null);
+  const folderRef = useRef(null);
+
+  const path = createFileOrFolderStore((state) => state.path);
+  const isFile = createFileOrFolderStore((state) => state.isFile);
+
+  const setPath = createFileOrFolderStore((state) => state.setPath);
+  const setIsFile = createFileOrFolderStore((state) => state.setIsFile);
+
+  const createFile = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    ws?.send(
+      JSON.stringify({
+        type: "createFile",
+        payload: {
+          path: path + "/" + name,
+          data: null,
+        },
+      })
+    );
+    setName("");
+    setDialogState("NONE");
+  };
+
+  const createFolder = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    ws?.send(
+      JSON.stringify({
+        type: "createFolder",
+        payload: {
+          path: path + "/" + name,
+          data: null,
+        },
+      })
+    );
+    setName("");
+    setDialogState("NONE");
+  };
 
   const toggleVisibility = (name: string) => {
     setVisible({ ...visible, [name]: !visible[name] });
@@ -80,9 +115,7 @@ const Tree = ({
     path: string
   ) => {
     e.preventDefault();
-    setContextForFolderOpen(true);
-    setX(e.clientX);
-    setY(e.clientY);
+
     setPath(path);
   };
 
@@ -91,9 +124,7 @@ const Tree = ({
     path: string
   ) => {
     e.preventDefault();
-    setContextForFileOpen(true);
-    setX(e.clientX);
-    setY(e.clientY);
+
     setPath(path);
   };
 
@@ -200,16 +231,11 @@ const Tree = ({
               data={child}
               ws={ws}
               addOrUpdateAvailableTabs={addOrUpdateAvailableTabs}
-              setX={setX}
-              setY={setY}
-              setContextForFileOpen={setContextForFileOpen}
-              setContextForFolderOpen={setContextForFolderOpen}
-              setPath={setPath}
             />
           ))}
       </div>
       {dialogState === "CREATE_FOLDER" && (
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md" ref={folderRef}>
           <DialogHeader>
             <DialogTitle>Create folder</DialogTitle>
           </DialogHeader>
@@ -217,14 +243,20 @@ const Tree = ({
             <div className="grid flex-1 gap-2">
               <Input
                 id="link"
-                defaultValue="https://ui.shadcn.com/docs/installation"
+                placeholder="Enter folder name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="border-black"
               />
             </div>
           </div>
           <DialogFooter className="sm:justify-end">
             <DialogClose asChild>
-              <Button type="button" variant="default">
+              <Button
+                type="button"
+                variant="default"
+                onClick={createFolder}
+              >
                 Create
               </Button>
             </DialogClose>
@@ -240,14 +272,16 @@ const Tree = ({
             <div className="grid flex-1 gap-2">
               <Input
                 id="link"
-                defaultValue="https://ui.shadcn.com/docs/installation"
+                placeholder="Enter file name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="border-black"
               />
             </div>
           </div>
           <DialogFooter className="sm:justify-end">
             <DialogClose asChild>
-              <Button type="button" variant="default">
+              <Button onClick={createFile} type="button" variant="default">
                 Create
               </Button>
             </DialogClose>
@@ -302,13 +336,6 @@ export const FolderStructureComponent = () => {
   const addOrUpdateAvailableTabs = availableTabsStore(
     (state) => state.addOrUpdateAvailableTabs
   );
-
-  const [x, setX] = useState<number | null>(null);
-  const [y, setY] = useState<number | null>(null);
-  const [contextForFolderOpen, setContextForFolderOpen] = useState(false);
-  const [contextForFileOpen, setContextForFileOpen] = useState(false);
-  const [path, setPath] = useState<string>("");
-
   const ws = websocketStore((state) => state.ws);
 
   return (
@@ -318,11 +345,6 @@ export const FolderStructureComponent = () => {
           data={folderStructure}
           ws={ws!}
           addOrUpdateAvailableTabs={addOrUpdateAvailableTabs}
-          setX={setX}
-          setY={setY}
-          setContextForFileOpen={setContextForFileOpen}
-          setContextForFolderOpen={setContextForFolderOpen}
-          setPath={setPath}
         />
       )}
     </>
