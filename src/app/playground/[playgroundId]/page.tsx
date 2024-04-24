@@ -88,7 +88,6 @@ export default function PlaygroundIdPage({
               <EditorTabs />
               <EditorComponent />
             </ResizablePanel>
-            {/* <ResizableHandle withHandle /> */}
             <ResizablePanel defaultSize={25}>
               <DynamicShell playgroundId="99dc20f9-64d4-4330-b5c1-4bb0ed1b3e99" />
             </ResizablePanel>

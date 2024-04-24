@@ -15,6 +15,7 @@ export default async function DashboardPage() {
       <SignedIn>
         <UserButton afterSignOutUrl="/" />
         <a href="/api/aws">Run Task</a>
+        <a href="/api/tree/id">getDirectories</a>
       </SignedIn>
       <SignedOut>
         <SignInButton
