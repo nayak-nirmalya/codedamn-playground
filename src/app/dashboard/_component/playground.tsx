@@ -111,8 +111,9 @@ export function Playground({
                     {playground.projectName}
                   </p>
                   {/* TODO: Show Confirmation Dialog */}
+                  {/* TODO: Add Rename Button and Dialog */}
                   <Button
-                    onClick={() => deleteProject(playground.id)}
+                    onClick={() => handleDelete(playground.id)}
                     variant="destructive"
                   >
                     Delete <Delete className="ml-2" />
