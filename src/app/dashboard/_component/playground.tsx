@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useState, useTransition } from "react";
+import { Delete } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,9 +17,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
 import { deleteProject, renameProject } from "@/actions/project";
-import { Delete } from "lucide-react";
 
 interface PropsType {
   playground: "Node" | "Next.js" | "Python";
@@ -36,6 +38,7 @@ export function Playground({
   const [dialog, setDialog] = useState<
     "CREATE_PLAYGROUND" | "RENAME_PLAYGROUND" | "DELETE_PLAYGROUND"
   >();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = (id: string) => {
@@ -74,7 +77,8 @@ export function Playground({
       if (content.data) {
         toast.success("Playground created!");
       }
-      console.log(content.data.id);
+
+      router.push("/playground/" + content.data.id);
     } catch {
       toast.error("Try differnt name for playground");
     }
@@ -107,9 +111,12 @@ export function Playground({
                   key={playground.id}
                   className="flex flex-row items-center border-2 m-2"
                 >
-                  <p className="text-lg font-bold m-2">
+                  <Link
+                    href={`/playground/${playground.id}`}
+                    className="text-lg font-bold m-2"
+                  >
                     {playground.projectName}
-                  </p>
+                  </Link>
                   {/* TODO: Show Confirmation Dialog */}
                   {/* TODO: Add Rename Button and Dialog */}
                   <Button
