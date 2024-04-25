@@ -36,7 +36,6 @@ export const project = pgTable("project", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: varchar("user_id", { length: 255 })
     .notNull()
-    .unique()
     .references(() => user.userId, { onDelete: "cascade" }),
   projectName: varchar("project_name", { length: 255 }).notNull().unique(),
   playground: playgroundEnum("playground").notNull(),

@@ -1,29 +1,32 @@
-import React, { useTransition } from "react";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/nextjs";
+import React from "react";
+import { SignedIn, UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+import { eq } from "drizzle-orm";
 
-import { runTask } from "@/actions/aws";
+import db from "@/db/drizzle";
+import { user } from "@/db/schema";
+
+import { Playground } from "./_component/playground";
 
 export default async function DashboardPage() {
+  const { userId } = auth();
+
+  const playgrounds = await db.query.project.findMany({
+    where: eq(user.userId, userId),
+  });
+
   return (
-    <div>
-      <h1>DashboardPage (Protected)</h1>
-      <SignedIn>
-        <UserButton afterSignOutUrl="/" />
-        <a href="/api/aws">Run Task</a>
-        <a href="/api/tree/id">getDirectories</a>
-      </SignedIn>
-      <SignedOut>
-        <SignInButton
-          mode="modal"
-          afterSignInUrl="/dashboard"
-          afterSignUpUrl="/dashboard"
-        />
-      </SignedOut>
-    </div>
+    <>
+      <div className="flex flex-row items-center justify-between p-3 bg-slate-700">
+        <h1 className="text-white text-lg font-semibold">
+          <a href="/">CodeDamn</a>
+        </h1>
+        <SignedIn>
+          <UserButton afterSignOutUrl="/" />
+        </SignedIn>
+      </div>
+
+      <Playground playgrounds={playgrounds} />
+    </>
   );
 }

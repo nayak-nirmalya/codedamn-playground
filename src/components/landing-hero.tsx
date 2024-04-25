@@ -36,7 +36,7 @@ export default function LandingHero() {
       <div>
         <Link href={isSignedIn ? "/dashboard" : "/sign-up"}>
           <Button
-            variant="default"
+            variant="primary"
             className="md:text-lg p-4 md:p-6 rounded-full font-semibold"
           >
             Start Building For Free
