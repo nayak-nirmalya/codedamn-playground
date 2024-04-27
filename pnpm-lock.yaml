@@ -83,6 +83,9 @@ importers:
       react-resizable-panels:
         specifier: ^2.0.18
         version: 2.0.18(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      s3-sync-client:
+        specifier: ^4.3.1
+        version: 4.3.1(@aws-sdk/abort-controller@3.374.0)(@aws-sdk/client-s3@3.556.0)
       sonner:
         specifier: ^1.4.41
         version: 1.4.41(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -178,6 +181,11 @@ packages:
 
   '@aws-crypto/util@3.0.0':
     resolution: {integrity: sha512-2OJlpeJpCR48CC8r+uKVChzs9Iungj9wkZrl8Z041DWEWvyIHILYKCPNzJghKsivj+S3mLo6BVc7mBNzdxA46w==}
+
+  '@aws-sdk/abort-controller@3.374.0':
+    resolution: {integrity: sha512-pO1pqFBdIF28ZvnJmg58Erj35RLzXsTrjvHghdc/xgtSvodFFCNrUsPg6AP3On8eiw9elpHoS4P8jMx1pHDXEw==}
+    engines: {node: '>=14.0.0'}
+    deprecated: This package has moved to @smithy/abort-controller
 
   '@aws-sdk/client-ecs@3.556.0':
     resolution: {integrity: sha512-IV7etxo8QQogq/0Onf6nmjogeuOqZSCtdUFuZz2M3Xq75k5oaEQ3CfFv4xRldr0WCMJ3SY8hjYiQGiYUyqzBmA==}
@@ -1107,6 +1115,10 @@ packages:
   '@rushstack/eslint-patch@1.10.2':
     resolution: {integrity: sha512-hw437iINopmQuxWPSUEvqE56NCPsiU8N4AYtfHmJFckclktzK9YQJieD3XkDCDH4OjL+C7zgPUh73R/nrcHrqw==}
 
+  '@smithy/abort-controller@1.1.0':
+    resolution: {integrity: sha512-5imgGUlZL4dW4YWdMYAKLmal9ny/tlenM81QZY7xYyb76z9Z/QOg7oM5Ak9HQl8QfFTlGVWwcMXl+54jroRgEQ==}
+    engines: {node: '>=14.0.0'}
+
   '@smithy/abort-controller@2.2.0':
     resolution: {integrity: sha512-wRlta7GuLWpTqtFfGo+nZyOO1vEvewdNR1R4rTxpC8XU6vG/NDyrFBhwLZsqg1NUoR1noVaXJPC/7ZK47QCySw==}
     engines: {node: '>=14.0.0'}
@@ -1230,6 +1242,10 @@ packages:
 
   '@smithy/smithy-client@2.5.1':
     resolution: {integrity: sha512-jrbSQrYCho0yDaaf92qWgd+7nAeap5LtHTI51KXqmpIFCceKU3K9+vIVTUH72bOJngBMqa4kyu1VJhRcSrk/CQ==}
+    engines: {node: '>=14.0.0'}
+
+  '@smithy/types@1.2.0':
+    resolution: {integrity: sha512-z1r00TvBqF3dh4aHhya7nz1HhvCg4TRmw51fjMrh5do3h+ngSstt/yKlNbHeb9QxJmFbmN8KEVSWgb1bRvfEoA==}
     engines: {node: '>=14.0.0'}
 
   '@smithy/types@2.12.0':
@@ -3018,6 +3034,13 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
+  s3-sync-client@4.3.1:
+    resolution: {integrity: sha512-nWbbKCNnXmWvD8XwdWhX25VNxIhgQEm6vXqSYjwyBNZI07OuMOr/LNOYmEPcLfqFFjy55ZNcFSBI18W29ybuUw==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      '@aws-sdk/abort-controller': ^3.x.x
+      '@aws-sdk/client-s3': ^3.x.x
+
   safe-array-concat@1.1.2:
     resolution: {integrity: sha512-vj6RsCsWBCf19jIeHEfkRMw8DPiBb+DMXklQ/1SGDHOMlHdPUkZXFQ2YdplS23zESTijAcurb1aSgJA3AgMu1Q==}
     engines: {node: '>=0.4'}
@@ -3540,6 +3563,11 @@ snapshots:
       '@aws-sdk/types': 3.535.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
+
+  '@aws-sdk/abort-controller@3.374.0':
+    dependencies:
+      '@smithy/abort-controller': 1.1.0
+      tslib: 2.6.2
 
   '@aws-sdk/client-ecs@3.556.0':
     dependencies:
@@ -4713,6 +4741,11 @@ snapshots:
 
   '@rushstack/eslint-patch@1.10.2': {}
 
+  '@smithy/abort-controller@1.1.0':
+    dependencies:
+      '@smithy/types': 1.2.0
+      tslib: 2.6.2
+
   '@smithy/abort-controller@2.2.0':
     dependencies:
       '@smithy/types': 2.12.0
@@ -4927,6 +4960,10 @@ snapshots:
       '@smithy/protocol-http': 3.3.0
       '@smithy/types': 2.12.0
       '@smithy/util-stream': 2.2.0
+      tslib: 2.6.2
+
+  '@smithy/types@1.2.0':
+    dependencies:
       tslib: 2.6.2
 
   '@smithy/types@2.12.0':
@@ -6944,6 +6981,11 @@ snapshots:
   run-parallel@1.2.0:
     dependencies:
       queue-microtask: 1.2.3
+
+  s3-sync-client@4.3.1(@aws-sdk/abort-controller@3.374.0)(@aws-sdk/client-s3@3.556.0):
+    dependencies:
+      '@aws-sdk/abort-controller': 3.374.0
+      '@aws-sdk/client-s3': 3.556.0
 
   safe-array-concat@1.1.2:
     dependencies:
