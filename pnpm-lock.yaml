@@ -104,9 +104,6 @@ importers:
       typewriter-effect:
         specifier: ^2.21.0
         version: 2.21.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      ws:
-        specifier: ^8.16.0
-        version: 8.16.0
       zustand:
         specifier: ^4.5.2
         version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
@@ -123,9 +120,6 @@ importers:
       '@types/react-dom':
         specifier: ^18
         version: 18.2.25
-      '@types/ws':
-        specifier: ^8.5.10
-        version: 8.5.10
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -1406,9 +1400,6 @@ packages:
 
   '@types/ssh2@1.15.0':
     resolution: {integrity: sha512-YcT8jP5F8NzWeevWvcyrrLB3zcneVjzYY9ZDSMAMboI+2zR1qYWFhwsyOFVzT7Jorn67vqxC0FRiw8YyG9P1ww==}
-
-  '@types/ws@8.5.10':
-    resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
 
   '@typescript-eslint/parser@7.2.0':
     resolution: {integrity: sha512-5FKsVcHTk6TafQKQbuIVkXq58Fnbkd2wDL4LB7AURN7RUOu1utVP+G8+6u3ZhEroW3DF6hyo3ZEXxgKgp4KeCg==}
@@ -3526,18 +3517,6 @@ packages:
       utf-8-validate:
         optional: true
 
-  ws@8.16.0:
-    resolution: {integrity: sha512-HS0c//TP7Ina87TfiPUz1rQzMhHrl/SG2guqRcTOIUYD2q8uhUdNHZYJUaQ8aTGPzCh+c6oawMKW35nFl1dxyQ==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
@@ -5247,10 +5226,6 @@ snapshots:
   '@types/ssh2@1.15.0':
     dependencies:
       '@types/node': 18.19.31
-
-  '@types/ws@8.5.10':
-    dependencies:
-      '@types/node': 20.12.7
 
   '@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5)':
     dependencies:
@@ -7640,8 +7615,6 @@ snapshots:
   wrappy@1.0.2: {}
 
   ws@8.11.0: {}
-
-  ws@8.16.0: {}
 
   xtend@4.0.2: {}
 

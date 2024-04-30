@@ -44,7 +44,6 @@
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "typewriter-effect": "^2.21.0",
-    "ws": "^8.16.0",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
@@ -52,7 +51,6 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@types/ws": "^8.5.10",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.20.17",
     "eslint": "^8",
